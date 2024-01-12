@@ -5,12 +5,12 @@ const hangmanImage = document.querySelector(".box img");
 const gameModal = document.querySelector(".game-modal");
 const playAgainBtn = gameModal.querySelector("button");
 
-// Initializing game variables
+// Játék variáns elinditasa
 let currentWord, correctLetters, wrongGuessCount;
 const probalkozasok = 12;
 
 const ujJatek = () => {
-    // Ressetting game variables and UI elements
+    // jatek varians es ui dolgok ujrakezdese
     correctLetters = [];
     wrongGuessCount = 0;
     hangmanImage.src = "kepek/elem-0.svg";
@@ -21,14 +21,14 @@ const ujJatek = () => {
 }
 
 const getRandomWord = () => {
-    // Selecting a random word and hint from the wordList
+    //Random szo kivalasztasa
     const { word } = wordList[Math.floor(Math.random() * wordList.length)];
-    currentWord = word; // Making currentWord as random word
+    currentWord = word; // currentWord a random szo
     ujJatek();
 }
 
 const gameOver = (isVictory) => {
-    // After game complete.. showing modal with relevant details
+    // Jatek kesz reszletekkel
     const modalText = isVictory ? `A megfejtés:` : 'A megfejtés:';
     gameModal.querySelector("img").src = `kepek/${isVictory ? 'victory' : 'lost'}.gif`;
     gameModal.querySelector("h4").innerText = isVictory ? 'Kitaláltad!' : 'Nem sikerült!';
@@ -37,9 +37,9 @@ const gameOver = (isVictory) => {
 }
 
 const initGame = (button, clickedLetter) => {
-    // Checking if clickedLetter is exist on the currentWord
+    // 
     if(currentWord.includes(clickedLetter)) {
-        // Showing all correct letters on the word display
+        // a helyes betuk szavak kimutatasa
         [...currentWord].forEach((letter, index) => {
             if(letter === clickedLetter) {
                 correctLetters.push(letter);
@@ -48,19 +48,19 @@ const initGame = (button, clickedLetter) => {
             }
         });
     } else {
-        // If clicked letter doesn't exist then update the wrongGuessCount and hangman image
+        // ha rosszat nyomsz elkezdi az akasztofat
         wrongGuessCount++;
         hangmanImage.src = `kepek/elem-${wrongGuessCount}.svg`;
     }
-    button.disabled = true; // Disabling the clicked button so user can't click again
+    button.disabled = true; // rossz betu kikapcsolasa
     guessesText.innerText = `${wrongGuessCount} / ${probalkozasok}`;
 
-    // Calling gameOver function if any of these condition meets
+    // gameOver funckio hivasa ha kifogysz az eletbol
     if(wrongGuessCount === probalkozasok) return gameOver(false);
     if(correctLetters.length === currentWord.length) return gameOver(true);
 }
 
-// Creating keyboard buttons and adding event listeners
+// billentyu gombok krealasa
 for (let i = 97; i <= 122; i++) {
     const button = document.createElement("button");
     button.innerText = String.fromCharCode(i);
